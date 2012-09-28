@@ -63,6 +63,7 @@ release: all deps docs $(SMF_MANIFESTS)
     $(TOP)/bin \
     $(TOP)/bootstrap \
     $(TOP)/Makefile \
+    $(TOP)/node_modules \
     $(TOP)/package.json \
     $(TMPDIR)/$(NAME)
 	(cd $(TMPDIR) && $(TAR) -zcf $(TOP)/$(RELEASE_TARBALL) *)
