@@ -22,7 +22,7 @@ TAP		:= ./node_modules/.bin/tap
 #
 # Files
 #
-DOC_FILES	 = index.restdown boilerplateapi.restdown
+DOC_FILES	 = index.restdown
 JS_FILES	:= $(shell ls *.js) $(shell find bin lib test -name '*.js')
 JSL_CONF_NODE	 = tools/jsl.node.conf
 JSL_FILES_NODE   = $(JS_FILES)
@@ -39,19 +39,19 @@ include ./tools/mk/Makefile.node_prebuilt.defs
 include ./tools/mk/Makefile.node_deps.defs
 include ./tools/mk/Makefile.smf.defs
 
-ROOT            := $(shell pwd)
-RELEASE_TARBALL := agents_core-pkg-$(STAMP).tar.gz
+NAME		:= agents_core
+RELEASE_TARBALL := $(NAME)-pkg-$(STAMP).tgz
 TMPDIR          := /tmp/$(STAMP)
+NODEUNIT	= $(TOP)/node_modules/.bin/nodeunit
+
+
 
 #
 # Repo-specific targets
 #
 .PHONY: all
-all: $(SMF_MANIFESTS) | $(TAP) $(REPO_DEPS)
-	$(NPM) rebuild
-
-$(TAP): | $(NPM_EXEC)
-	$(NPM) install
+all: $(SMF_MANIFESTS) | $(NPMEXEC) $(REPO_DEPS)
+	$(NPM) install && $(NPM) update
 
 CLEAN_FILES += $(TAP) ./node_modules/tap
 
@@ -62,15 +62,32 @@ test: $(TAP)
 .PHONY: release
 release: all deps docs $(SMF_MANIFESTS)
 	@echo "Building $(RELEASE_TARBALL)"
-	@mkdir -p $(TMPDIR)/agents_core
-	cd $(ROOT) && $(NPM) install
-	cp -r $(ROOT)/build \
-    $(ROOT)/bin \
-    $(ROOT)/Makefile \
-    $(ROOT)/package.json \
+	@mkdir -p $(TMPDIR)/$(NAME)
+	cd $(TOP) && $(NPM) install
+	cp -r $(TOP)/build \
+    $(TOP)/bin \
+    $(TOP)/Makefile \
+    $(TOP)/package.json \
     $(TMPDIR)/agents_core
-	(cd $(TMPDIR) && $(TAR) -zcf $(ROOT)/$(RELEASE_TARBALL) *)
+	(cd $(TMPDIR) && $(TAR) -zcf $(TOP)/$(RELEASE_TARBALL) *)
 	@rm -rf $(TMPDIR)
+
+.PHONY: publish
+publish: release
+	@if [[ -z "$(BITS_DIR)" ]]; then \
+		@echo "error: 'BITS_DIR' must be set for 'publish' target"; \
+		exit 1; \
+	fi
+	mkdir -p $(BITS_DIR)/$(NAME)
+	cp $(TOP)/$(RELEASE_TARBALL) $(BITS_DIR)/$(NAME)/$(RELEASE_TARBALL)
+
+.PHONY: dumpvar
+dumpvar:
+	@if [[ -z "$(VAR)" ]]; then \
+		echo "error: set 'VAR' to dump a var"; \
+		exit 1; \
+	fi
+	@echo "$(VAR) is '$($(VAR))'"
 
 
 include ./tools/mk/Makefile.deps
