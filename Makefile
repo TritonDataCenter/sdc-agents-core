@@ -15,11 +15,6 @@
 #
 
 #
-# Tools
-#
-TAP		:= ./node_modules/.bin/tap
-
-#
 # Files
 #
 DOC_FILES	 = index.restdown
@@ -50,7 +45,7 @@ NODEUNIT	= $(TOP)/node_modules/.bin/nodeunit
 # Repo-specific targets
 #
 .PHONY: all
-all: $(SMF_MANIFESTS) | $(NPMEXEC) $(REPO_DEPS)
+all: $(SMF_MANIFESTS) | $(NPME_XEC) $(REPO_DEPS)
 	$(NPM) install && $(NPM) update
 
 CLEAN_FILES += $(TAP) ./node_modules/tap
@@ -68,7 +63,7 @@ release: all deps docs $(SMF_MANIFESTS)
     $(TOP)/bin \
     $(TOP)/Makefile \
     $(TOP)/package.json \
-    $(TMPDIR)/agents_core
+    $(TMPDIR)/$(NAME)
 	(cd $(TMPDIR) && $(TAR) -zcf $(TOP)/$(RELEASE_TARBALL) *)
 	@rm -rf $(TMPDIR)
 
