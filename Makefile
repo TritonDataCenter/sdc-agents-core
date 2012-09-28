@@ -26,7 +26,7 @@ JSSTYLE_FLAGS    = -o indent=4,doxygen,unparenthesized-return=0
 
 
 NODE_PREBUILT_VERSION=v0.8.9
-NODE_PREBUILT_TAG=zone
+NODE_PREBUILT_TAG=gz
 
 
 include ./tools/mk/Makefile.defs
@@ -45,7 +45,7 @@ NODEUNIT	= $(TOP)/node_modules/.bin/nodeunit
 # Repo-specific targets
 #
 .PHONY: all
-all: $(SMF_MANIFESTS) | $(NPME_XEC) $(REPO_DEPS)
+all: $(SMF_MANIFESTS) | $(NPM_EXEC) $(REPO_DEPS)
 	$(NPM) install && $(NPM) update
 
 CLEAN_FILES += $(TAP) ./node_modules/tap
