@@ -35,7 +35,7 @@ include ./tools/mk/Makefile.node_deps.defs
 include ./tools/mk/Makefile.smf.defs
 
 NAME		:= agents_core
-RELEASE_TARBALL := $(NAME)-pkg-$(STAMP).tgz
+RELEASE_TARBALL := $(NAME)-$(STAMP).tgz
 TMPDIR          := /tmp/$(STAMP)
 NODEUNIT	= $(TOP)/node_modules/.bin/nodeunit
 
