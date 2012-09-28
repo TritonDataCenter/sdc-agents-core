@@ -4,6 +4,11 @@
   "version": "2.1.0",
   "author": "Joyent (joyent.com)",
   "private": true,
+  "dependencies": {
+    "amqp_agent": "git+ssh://git@git.joyent.com:node_agent.git#e458b14e4a34d48ebe13544e6209f9fb0776c66a",
+    "async": "0.1.18",
+	  "log4js": "0.4.1"
+  },
   "bin": {
     "apm":         "./bin/apm.js",
     "amqp-config": "./bin/amqp-config.js",
