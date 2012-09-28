@@ -61,6 +61,7 @@ release: all deps docs $(SMF_MANIFESTS)
 	cd $(TOP) && $(NPM) install
 	cp -r $(TOP)/build \
     $(TOP)/bin \
+    $(TOP)/bootstrap \
     $(TOP)/Makefile \
     $(TOP)/package.json \
     $(TMPDIR)/$(NAME)
