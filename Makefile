@@ -59,7 +59,7 @@ release: all deps docs $(SMF_MANIFESTS)
 	@echo "Building $(RELEASE_TARBALL)"
 	@mkdir -p $(TMPDIR)/$(NAME)
 	cd $(TOP) && $(NPM) install
-	cp -r $(TOP)/build \
+	cp -r \
     $(TOP)/bin \
     $(TOP)/bootstrap \
     $(TOP)/Makefile \
