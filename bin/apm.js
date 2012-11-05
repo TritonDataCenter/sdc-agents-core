@@ -443,6 +443,22 @@ function installPackage(toInstall, cb) {
 }
 
 
+function updateSysinfo(callback) {
+    execFile(
+        '/usr/bin/sysinfo',
+        ['-u'],
+        function (error, stdout, stderr) {
+            if (error) {
+                callback(
+                    new Error('Error running sysinfo: ' + stderr.toString()));
+                return;
+            }
+            log.info('Updated sysinfo values');
+            callback();
+        });
+}
+
+
 function command_install() {
     var things = process.argv.slice(3);
 
@@ -465,14 +481,21 @@ function command_install() {
             });
         },
         function (error) {
-            log.info('Done installing all packages.');
-            if (errors.length) {
-                log.error('There were errors:');
-                displayErrors(errors);
-                process.exit(1);
-            }
+            updateSysinfo(function (error) {
+                if (error) {
+                    log.error(
+                        'Error updating sysinfo: ', thing, error.message);
+                }
+                log.info('Done installing all packages.');
+                if (errors.length) {
+                    log.error('There were errors:');
+                    displayErrors(errors);
+                    process.exit(1);
+                }
+            });
         });
 }
+
 
 function displayErrors(errors) {
     errors.forEach(function (error) {
@@ -484,6 +507,7 @@ function displayErrors(errors) {
         }
     });
 }
+
 
 function command_uninstall() {
     var things = process.argv.slice(3);
@@ -508,14 +532,21 @@ function command_uninstall() {
             });
         },
         function (error) {
-            log.info('Done uninstalling all packages.');
-            if (errors.length) {
-                log.error('There were errors:');
-                displayErrors(errors);
-                process.exit(1);
-            }
+            updateSysinfo(function (error) {
+                if (error) {
+                    log.error(
+                        'Error updating sysinfo: ', thing, error.message);
+                }
+                log.info('Done uninstalling all packages.');
+                if (errors.length) {
+                    log.error('There were errors:');
+                    displayErrors(errors);
+                    process.exit(1);
+                }
+            });
         });
 }
+
 
 function main() {
     var commands = {

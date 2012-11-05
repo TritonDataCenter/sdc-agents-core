@@ -1,10 +1,10 @@
 # Joyent Engineering Guide
 
-Repository: <git@git.joyent.com:eng.git>
-Browsing: <https://mo.joyent.com/eng>
-Who: Trent Mick, Dave Pacheco
-Docs: <https://mo.joyent.com/docs/eng>
-Tickets/bugs: <https://devhub.joyent.com/jira/browse/TOOLS>
+Repository: <git@git.joyent.com:agents_core.git>
+Browsing: <https://mo.joyent.com/agents_core>
+Who: Orlando Vazquez
+Docs: <https://mo.joyent.com/docs/agents_core>
+Tickets/bugs: <https://devhub.joyent.com/jira/browse/AGENT>
 
 
 # Overview
