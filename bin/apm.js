@@ -481,10 +481,11 @@ function command_install() {
             });
         },
         function (error) {
-            updateSysinfo(function (error) {
-                if (error) {
+            updateSysinfo(function (sysinfoError) {
+                if (sysinfoError) {
                     log.error(
-                        'Error updating sysinfo: ', thing, error.message);
+                        'Error updating sysinfo: ',
+                        sysinfoError.message);
                 }
                 log.info('Done installing all packages.');
                 if (errors.length) {
@@ -532,10 +533,11 @@ function command_uninstall() {
             });
         },
         function (error) {
-            updateSysinfo(function (error) {
-                if (error) {
+            updateSysinfo(function (sysinfoError) {
+                if (sysinfoError) {
                     log.error(
-                        'Error updating sysinfo: ', thing, error.message);
+                        'Error updating sysinfo: ',
+                        sysinfoError.message);
                 }
                 log.info('Done uninstalling all packages.');
                 if (errors.length) {
@@ -547,11 +549,52 @@ function command_uninstall() {
         });
 }
 
+function command_list() {
+    fs.readdir(installdir, function (dirError, files) {
+        if (dirError) {
+            log.error(
+                'Error reading ' +
+                installdir);
+            return;
+        }
+
+        files = files.sort();
+
+        async.forEach(
+            files,
+            function (f, cb) {
+                var fn = path.join(installdir, f, 'package.json');
+                var exists = fs.existsSync(fn);
+                if (!exists) {
+                    log.warn(
+                        'No package.json found in ' +
+                        path.join(installdir, f));
+                    cb();
+                    return;
+                }
+
+                fs.readFile(fn, function (error, data) {
+                    var pkg = JSON.parse(data.toString());
+                    process.stdout.write(
+                        f + ' ' + (pkg.version || '') +
+                        '\n');
+                    cb();
+                });
+            },
+            function (error) {
+                if (error) {
+                    log.error('Error: ' + error.message);
+                }
+            });
+    });
+}
+
 
 function main() {
     var commands = {
         install:   command_install,
-        uninstall: command_uninstall
+        uninstall: command_uninstall,
+        list:      command_list
     };
 
     var command = process.argv[2];
