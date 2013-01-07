@@ -258,6 +258,8 @@ function uninstallPackage(pkg, cb) {
     ],
     function (error) {
         if (error) {
+            log.error('Error uninstalling package');
+            log.error(error);
             return cb();
         }
         return cb();
