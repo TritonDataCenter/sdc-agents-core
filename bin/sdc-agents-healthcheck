@@ -25,7 +25,7 @@ do
     for agent in $agents; do
         echo -n "$uuid $agent "
 
-        ping-agent $uuid  $agent timeout=10000 2>&1 | egrep -s "req_id:"
+        /opt/smartdc/agents/bin/ping-agent $uuid  $agent timeout=10000 2>&1 | egrep -s "req_id:"
 
         if [ $? -eq '0' ]; then
             status=ok

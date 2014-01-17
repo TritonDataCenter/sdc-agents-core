@@ -14,6 +14,7 @@
   "bin": {
     "apm":         "./bin/apm.js",
     "amqp-config": "./bin/amqp-config.js",
-    "ping-agent":  "./bin/ping-agent.js"
+    "ping-agent":  "./bin/ping-agent.js",
+    "sdc-agents-healthcheck":  "./bin/sdc-agents-healthcheck"
   }
 }
