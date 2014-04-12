@@ -11,12 +11,11 @@
 
 var async = require('async');
 var mkdirp = require('mkdirp');
-var tar = require('tar');
-var zlib = require('zlib');
 var fs = require('fs');
 var createHash = require('crypto').createHash;
 var assert = require('assert');
 var execFile = require('child_process').execFile;
+var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 var path = require('path');
 var log4js = require('log4js');
@@ -285,44 +284,48 @@ function installPackage(toInstall, cb) {
         function (callback) {
             fs.stat(toInstall, function (error, stat) {
                 if (error) {
-                    return callback(error);
+                    callback(error);
+                    return;
                 }
 
                 if (stat.isDirectory()) {
-                    return execFile(
+                    execFile(
                         '/usr/bin/cp',
                         [ '-Pr', toInstall, packagetmp + '/pkg' ],
                         function (execError, stdout, stderr) {
                             if (execError) {
-                                return callback(
+                                callback(
                                     new Error(
                                         'Error copying install source: '
                                         + execError.message));
+                                return;
                             }
                             process.chdir(localtmp);
-                            return callback();
-                        });
-                } else if (stat.isFile()) {
-                    var returned = false;
-
-                    var afterUntar = function () {
-                        if (!returned) {
-                            returned = true;
                             callback();
-                        }
-                    };
+                            return;
+                        });
+                    return;
+                } else if (stat.isFile()) {
+                    var cmd = '/usr/bin/tar zxf ' + toInstall + ' -C ' +
+                        packagetmp;
 
-                    return fs.createReadStream(toInstall)
-                    .on('error', afterUntar)
-                    .pipe(zlib.Unzip())
-                    .on('error', afterUntar)
-                    .pipe(tar.Extract({ type: 'Directory', path: packagetmp }))
-                    .on('error', afterUntar)
-                    .on('close', afterUntar);
+                    function onExec(err, stdout, stderr) {
+                        if (err) {
+                            log.error(stderr.toString());
+                            log.error(err.message);
+                            log.error(err.stack);
+                            callback(error);
+                        }
+                        callback();
+                    }
+
+                    exec(cmd, onExec);
+                    return;
                 } else {
                     var msg = 'Installation source had unknown type.';
                     log.error(msg);
-                    return callback(new Error(msg));
+                    callback(new Error(msg));
+                    return;
                 }
             });
         },
@@ -350,9 +353,11 @@ function installPackage(toInstall, cb) {
                     log.warn(
                         'Detected %s as being already installed. '
                     + 'Uninstalling before continuing.', name);
-                    return uninstallPackage(name, callback);
+                    uninstallPackage(name, callback);
+                    return;
                 } else {
-                    return callback();
+                    callback();
+                    return;
                 }
             });
         },
