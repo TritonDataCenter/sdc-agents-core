@@ -27,7 +27,9 @@ JSSTYLE_FLAGS    = -o indent=4,doxygen,unparenthesized-return=0
 # Should be the same version as the platform's /usr/node/bin/node.
 NODE_PREBUILT_VERSION=v0.8.20
 NODE_PREBUILT_TAG=gz
-
+ifeq ($(shell uname -s),SunOS)
+    NODE_PREBUILT_IMAGE=fd2cc906-8938-11e3-beab-4359c665ac99
+endif
 
 include ./tools/mk/Makefile.defs
 include ./tools/mk/Makefile.node_prebuilt.defs
@@ -36,6 +38,7 @@ include ./tools/mk/Makefile.smf.defs
 
 NAME		:= agents_core
 RELEASE_TARBALL := $(NAME)-$(STAMP).tgz
+RELEASE_MANIFEST := $(NAME)-$(STAMP).manifest
 TMPDIR          := /tmp/$(STAMP)
 NODEUNIT	= $(TOP)/node_modules/.bin/nodeunit
 
@@ -67,6 +70,16 @@ release: all deps docs $(SMF_MANIFESTS)
     $(TOP)/package.json \
     $(TMPDIR)/$(NAME)
 	(cd $(TMPDIR) && $(TAR) -zcf $(TOP)/$(RELEASE_TARBALL) *)
+	cat $(TOP)/manifest.tmpl | sed \
+		-e "s/UUID/$$(uuid -v4)/" \
+		-e "s/NAME/$$(json name < $(TOP)/package.json)/" \
+		-e "s/VERSION/$$(json version < $(TOP)/package.json)/" \
+		-e "s/DESCRIPTION/$$(json description < $(TOP)/package.json)/" \
+		-e "s/BUILDSTAMP/$(STAMP)/" \
+		-e "s/SIZE/$$(stat --printf="%s" $(TOP)/$(RELEASE_TARBALL))/" \
+		-e "s/SHA/$$(openssl sha1 $(TOP)/$(RELEASE_TARBALL) \
+		    | cut -d ' ' -f2)/" \
+		> $(TOP)/$(RELEASE_MANIFEST)
 	@rm -rf $(TMPDIR)
 
 .PHONY: publish
@@ -77,6 +90,7 @@ publish: release
 	fi
 	mkdir -p $(BITS_DIR)/$(NAME)
 	cp $(TOP)/$(RELEASE_TARBALL) $(BITS_DIR)/$(NAME)/$(RELEASE_TARBALL)
+	cp $(TOP)/$(RELEASE_MANIFEST) $(BITS_DIR)/$(NAME)/$(RELEASE_MANIFEST)
 
 .PHONY: dumpvar
 dumpvar:
