@@ -15,5 +15,6 @@
     "amqp-config": "./bin/amqp-config.js",
     "ping-agent": "./bin/ping-agent.js",
     "sdc-agents-healthcheck": "./bin/sdc-agents-healthcheck"
-  }
+  },
+  "license": "MPL-2.0"
 }
