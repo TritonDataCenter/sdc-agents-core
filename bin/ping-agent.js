@@ -33,7 +33,7 @@ while (i--) {
 
 var timeout = opts.timeout || Number(opts.timeout);
 
-var client = new (require('amqp_agent/client')).Client({ timeout: timeout });
+var client = new (require('../lib/amqp_agent/client')).Client({ timeout: timeout });
 
 client.connect(function () {
     console.log('Connected');
