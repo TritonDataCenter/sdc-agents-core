@@ -64,6 +64,7 @@ release: all deps docs $(SMF_MANIFESTS)
 	cd $(TOP) && $(NPM) install
 	cp -r \
     $(TOP)/bin \
+    $(TOP)/lib \
     $(TOP)/bootstrap \
     $(TOP)/Makefile \
     $(TOP)/node_modules \
