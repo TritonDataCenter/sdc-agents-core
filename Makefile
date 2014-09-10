@@ -58,7 +58,7 @@ test: $(TAP)
 	TAP=1 $(TAP) test/*.test.js
 
 .PHONY: release
-release: all deps docs $(SMF_MANIFESTS)
+release: all deps $(SMF_MANIFESTS)
 	@echo "Building $(RELEASE_TARBALL)"
 	@mkdir -p $(TMPDIR)/$(NAME)
 	cd $(TOP) && $(NPM) install
