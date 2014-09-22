@@ -31,7 +31,12 @@ ifeq ($(shell uname -s),SunOS)
 endif
 
 include ./tools/mk/Makefile.defs
-include ./tools/mk/Makefile.node_prebuilt.defs
+ifeq ($(shell uname -s),SunOS)
+    include ./tools/mk/Makefile.node_prebuilt.defs
+else
+    include ./tools/mk/Makefile.node.defs
+endif
+
 include ./tools/mk/Makefile.node_deps.defs
 include ./tools/mk/Makefile.smf.defs
 
@@ -103,7 +108,12 @@ dumpvar:
 
 
 include ./tools/mk/Makefile.deps
-include ./tools/mk/Makefile.node_prebuilt.targ
+ifeq ($(shell uname -s),SunOS)
+    include ./tools/mk/Makefile.node_prebuilt.targ
+else
+    include ./tools/mk/Makefile.node.targ
+endif
 include ./tools/mk/Makefile.node_deps.targ
 include ./tools/mk/Makefile.smf.targ
 include ./tools/mk/Makefile.targ
+
