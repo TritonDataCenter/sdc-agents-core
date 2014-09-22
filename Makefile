@@ -39,7 +39,7 @@ include ./tools/mk/Makefile.smf.defs
 NAME		:= agents_core
 RELEASE_TARBALL := $(NAME)-$(STAMP).tgz
 RELEASE_MANIFEST := $(NAME)-$(STAMP).manifest
-TMPDIR          := /tmp/$(STAMP)
+RELSTAGEDIR      := /tmp/$(STAMP)
 NODEUNIT	= $(TOP)/node_modules/.bin/nodeunit
 
 
@@ -60,7 +60,7 @@ test: $(TAP)
 .PHONY: release
 release: all deps $(SMF_MANIFESTS)
 	@echo "Building $(RELEASE_TARBALL)"
-	@mkdir -p $(TMPDIR)/$(NAME)
+	@mkdir -p $(RELSTAGEDIR)/$(NAME)
 	cd $(TOP) && $(NPM) install
 	cp -r \
     $(TOP)/bin \
@@ -69,11 +69,11 @@ release: all deps $(SMF_MANIFESTS)
     $(TOP)/Makefile \
     $(TOP)/node_modules \
     $(TOP)/package.json \
-    $(TMPDIR)/$(NAME)
-	uuid -v4 > $(TMPDIR)/$(NAME)/image_uuid
-	(cd $(TMPDIR) && $(TAR) -zcf $(TOP)/$(RELEASE_TARBALL) *)
+    $(RELSTAGEDIR)/$(NAME)
+	uuid -v4 > $(RELSTAGEDIR)/$(NAME)/image_uuid
+	(cd $(RELSTAGEDIR) && $(TAR) -zcf $(TOP)/$(RELEASE_TARBALL) *)
 	cat $(TOP)/manifest.tmpl | sed \
-		-e "s/UUID/$$(cat $(TMPDIR)/$(NAME)/image_uuid)/" \
+		-e "s/UUID/$$(cat $(RELSTAGEDIR)/$(NAME)/image_uuid)/" \
 		-e "s/NAME/$$(json name < $(TOP)/package.json)/" \
 		-e "s/VERSION/$$(json version < $(TOP)/package.json)/" \
 		-e "s/DESCRIPTION/$$(json description < $(TOP)/package.json)/" \
@@ -82,7 +82,7 @@ release: all deps $(SMF_MANIFESTS)
 		-e "s/SHA/$$(openssl sha1 $(TOP)/$(RELEASE_TARBALL) \
 		    | cut -d ' ' -f2)/" \
 		> $(TOP)/$(RELEASE_MANIFEST)
-	@rm -rf $(TMPDIR)
+	@rm -rf $(RELSTAGEDIR)
 
 .PHONY: publish
 publish: release
