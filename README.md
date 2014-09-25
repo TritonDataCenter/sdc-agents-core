@@ -8,19 +8,15 @@
     Copyright (c) 2014, Joyent, Inc.
 -->
 
-# Agents Core
+# sdc-agents-core
 
-Repository: <git@github.com:joyent/sdc-agents-core.git>
-Browsing: <https://mo.joyent.com/agents_core>
-Who: Orlando Vazquez
-Docs: <https://mo.joyent.com/docs/agents_core>
-Tickets/bugs: <https://devhub.joyent.com/jira/browse/AGENT>
+This repository is part of the Joyent SmartDataCenter project (SDC).  For
+contribution guidelines, issues, and general documentation, visit the main
+[SDC](http://github.com/joyent/sdc) project page.
 
 
-# Overview
-
-This repo contains the necessary parts to bootstrap an agents installation onto
-a SmartDataCenter node.
+sdc-agents-core bootstraps an agents installation onto a SmartDataCenter
+compute/headnodes.
 
 # Repository
 
