@@ -72,6 +72,7 @@ release: all deps $(SMF_MANIFESTS)
     $(TOP)/bootstrap \
     $(TOP)/Makefile \
     $(TOP)/node_modules \
+    $(TOP)/npm \
     $(TOP)/package.json \
     $(RELSTAGEDIR)/$(NAME)
 	uuid -v4 > $(RELSTAGEDIR)/$(NAME)/image_uuid
