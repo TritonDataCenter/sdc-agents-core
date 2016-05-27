@@ -16,5 +16,8 @@
     "ping-agent": "./bin/ping-agent.js",
     "sdc-agents-healthcheck": "./bin/sdc-agents-healthcheck"
   },
+  "scripts": {
+    "postinstall": "./npm/postinstall.sh"
+  },
   "license": "MPL-2.0"
 }
