@@ -6,7 +6,7 @@
  */
 
 /*
- * Copyright (c) 2014, Joyent, Inc.
+ * Copyright (c) 2016, Joyent, Inc.
  */
 
 /*
@@ -374,7 +374,7 @@ function installPackage(toInstall, cb) {
             runLifecycleScript(
                 'preinstall',
                 packageJson,
-                installeddir,
+                thingdir,
                 function (error) {
                     if (error) {
                         return callback(error);
