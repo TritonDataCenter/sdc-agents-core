@@ -6,7 +6,7 @@
  */
 
 /*
- * Copyright (c) 2016, Joyent, Inc.
+ * Copyright (c) 2018, Joyent, Inc.
  */
 
 /*
@@ -21,7 +21,6 @@
 var async = require('async');
 var mkdirp = require('mkdirp');
 var fs = require('fs');
-var createHash = require('crypto').createHash;
 var assert = require('assert');
 var execFile = require('child_process').execFile;
 var exec = require('child_process').exec;
@@ -31,13 +30,14 @@ var log4js = require('log4js');
 var tty = require('tty');
 
 var prefix = '/opt/smartdc/agents';
-var tmp = '/var/tmp';
 var modules = 'lib/node_modules';
-var installdir = prefix + '/' + modules;
+
 var bindir = prefix + '/bin';
-var smfdir = prefix + '/smf';
-var etcdir = prefix + '/etc';
 var dbdir = prefix + '/db';
+var etcdir = prefix + '/etc';
+var installdir = prefix + '/' + modules;
+var smfdir = prefix + '/smf';
+var tmp = prefix + '/tmp';
 
 log4js.clearAppenders();
 var isatty = tty.isatty(process.stdout.fd);
@@ -279,7 +279,7 @@ function installPackage(toInstall, cb) {
     var thingdir;
     var installeddir;
     var packageJson;
-    var packagetmp = localtmp+'/package';
+    var packagetmp = localtmp + '/package';
 
     async.waterfall([
         function (callback) {
@@ -298,6 +298,7 @@ function installPackage(toInstall, cb) {
                 }
 
                 if (stat.isDirectory()) {
+                    log.warn('Installing from a directory is deprecated');
                     execFile(
                         '/usr/bin/cp',
                         [ '-Pr', toInstall, packagetmp + '/pkg' ],
@@ -395,7 +396,7 @@ function installPackage(toInstall, cb) {
         },
         function (callback) {
             process.chdir(installeddir);
-            // Move the unpacked package directory into its final home.
+            // Remove the temp directory.
             execFile('/usr/bin/rm', [ '-fr', localtmp ],
                 function (error, stdout, stderr) {
                     log.info('Deleting temp directory: %s', localtmp);
