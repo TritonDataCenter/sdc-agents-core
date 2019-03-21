@@ -45,7 +45,7 @@ NODEUNIT	= $(TOP)/node_modules/.bin/nodeunit
 # Repo-specific targets
 #
 .PHONY: all
-all: $(SMF_MANIFESTS) | $(NPM_EXEC) $(REPO_DEPS)
+all: $(SMF_MANIFESTS) | $(REPO_DEPS)
 	$(NPM) install && $(NPM) update
 
 CLEAN_FILES += $(TAP) ./node_modules/tap
