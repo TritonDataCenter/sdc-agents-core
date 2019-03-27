@@ -26,6 +26,9 @@ JSSTYLE_FLAGS    = -o indent=4,doxygen,unparenthesized-return=0
 # NPM here is set to the default npm in the path. This is because we're not
 # shipping a node, and we just need *an* npm to install the non-addon
 # package.json dependencies for us.
+#
+# If there's no npm in the path or if that npm cannot install node packages,
+# this will not work.
 NPM := npm
 
 BASE_IMAGE_UUID := fd2cc906-8938-11e3-beab-4359c665ac99
