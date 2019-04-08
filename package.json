@@ -13,6 +13,7 @@
   "bin": {
     "apm": "./bin/apm.js",
     "amqp-config": "./bin/amqp-config.js",
+    "dtrace-provider": "0.8.7",
     "ping-agent": "./bin/ping-agent.js",
     "sdc-agents-healthcheck": "./bin/sdc-agents-healthcheck"
   },

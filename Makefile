@@ -88,7 +88,7 @@ release: all deps $(SMF_MANIFESTS)
 	# RELSTAGEDIR since we are using the build zone's npm/node. If node add-ons
 	# are added, we'll need to switch to using sdcnode again and remove this
 	# guard.
-	find $(RELSTAGEDIR) -name "*.node" | grep -q '.*'
+	find $(RELSTAGEDIR) -name "*.node" | grep '.*'
 	@rm -rf $(RELSTAGEDIR)
 
 .PHONY: publish
