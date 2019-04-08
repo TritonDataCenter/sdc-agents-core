@@ -7,13 +7,13 @@
   "dependencies": {
     "amqp": "git://github.com/postwait/node-amqp.git#ae3a1435ac40379cb6f395085f3dc4444b649143",
     "async": "0.1.18",
+    "dtrace-provider": "0.8.7",
     "log4js": "0.4.1",
     "mkdirp": "0.3.4"
   },
   "bin": {
     "apm": "./bin/apm.js",
     "amqp-config": "./bin/amqp-config.js",
-    "dtrace-provider": "0.8.7",
     "ping-agent": "./bin/ping-agent.js",
     "sdc-agents-healthcheck": "./bin/sdc-agents-healthcheck"
   },
