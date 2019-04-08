@@ -88,7 +88,9 @@ release: all deps $(SMF_MANIFESTS)
 	# RELSTAGEDIR since we are using the build zone's npm/node. If node add-ons
 	# are added, we'll need to switch to using sdcnode again and remove this
 	# guard.
-	[[ -z "$$(find $(RELSTAGEDIR) -name '*.node' | grep '.*')" ]]
+	@if find $(RELSTAGEDIR) -name '*.node' | grep '.*'; then
+	    echo "error: node add-ons are not supported without sdcnode."
+	fi
 	@rm -rf $(RELSTAGEDIR)
 
 .PHONY: publish
