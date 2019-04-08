@@ -84,6 +84,11 @@ release: all deps $(SMF_MANIFESTS)
 		-e "s/SHA/$$(openssl sha1 $(TOP)/$(RELEASE_TARBALL) \
 		    | cut -d ' ' -f2)/" \
 		> $(TOP)/$(RELEASE_MANIFEST)
+	# This next line is intended to error if there are any node add-ons in the
+	# RELSTAGEDIR since we are using the build zone's npm/node. If node add-ons
+	# are added, we'll need to switch to using sdcnode again and remove this
+	# guard.
+	find $(RELSTAGEDIR) -name "*.node" | grep -q '.*'
 	@rm -rf $(RELSTAGEDIR)
 
 .PHONY: publish
