@@ -23,22 +23,18 @@ JSL_FILES_NODE   = $(JS_FILES)
 JSSTYLE_FILES	 = $(JS_FILES)
 JSSTYLE_FLAGS    = -o indent=4,doxygen,unparenthesized-return=0
 
-# Should be the same version as the platform's /usr/node/bin/node.
-NODE_PREBUILT_VERSION=v0.12.14
-NODE_PREBUILT_TAG=gz
-ifeq ($(shell uname -s),SunOS)
-    NODE_PREBUILT_IMAGE=fd2cc906-8938-11e3-beab-4359c665ac99
-endif
+# NPM here is set to the default npm in the path. This is because we're not
+# shipping a node, and we just need *an* npm to install the non-addon
+# package.json dependencies for us.
+#
+# If there's no npm in the path or if that npm cannot install node packages,
+# this will not work.
+NPM := npm
 
+BASE_IMAGE_UUID := fd2cc906-8938-11e3-beab-4359c665ac99
 ENGBLD_REQUIRE := $(shell git submodule update --init deps/eng)
 include ./deps/eng/tools/mk/Makefile.defs
 TOP ?= $(error Unable to access eng.git submodule Makefiles.)
-
-ifeq ($(shell uname -s),SunOS)
-    include ./deps/eng/tools/mk/Makefile.node_prebuilt.defs
-else
-    include ./deps/eng/tools/mk/Makefile.node.defs
-endif
 
 include ./deps/eng/tools/mk/Makefile.smf.defs
 
@@ -52,7 +48,7 @@ NODEUNIT	= $(TOP)/node_modules/.bin/nodeunit
 # Repo-specific targets
 #
 .PHONY: all
-all: $(SMF_MANIFESTS) | $(NPM_EXEC) $(REPO_DEPS)
+all: $(SMF_MANIFESTS) | $(REPO_DEPS)
 	$(NPM) install && $(NPM) update
 
 CLEAN_FILES += $(TAP) ./node_modules/tap
@@ -88,6 +84,14 @@ release: all deps $(SMF_MANIFESTS)
 		-e "s/SHA/$$(openssl sha1 $(TOP)/$(RELEASE_TARBALL) \
 		    | cut -d ' ' -f2)/" \
 		> $(TOP)/$(RELEASE_MANIFEST)
+	# This next line is intended to error if there are any node add-ons in the
+	# RELSTAGEDIR since we are using the build zone's npm/node. If node add-ons
+	# are added, we'll need to switch to using sdcnode again and remove this
+	# guard.
+	@if find $(RELSTAGEDIR) -name '*.node' | grep '.*'; then \
+		echo "error: node add-ons are not supported without sdcnode."; \
+		exit 1; \
+	fi
 	@rm -rf $(RELSTAGEDIR)
 
 .PHONY: publish
@@ -106,10 +110,5 @@ dumpvar:
 
 
 include ./deps/eng/tools/mk/Makefile.deps
-ifeq ($(shell uname -s),SunOS)
-    include ./deps/eng/tools/mk/Makefile.node_prebuilt.targ
-else
-    include ./deps/eng/tools/mk/Makefile.node.targ
-endif
 include ./deps/eng/tools/mk/Makefile.smf.targ
 include ./deps/eng/tools/mk/Makefile.targ
