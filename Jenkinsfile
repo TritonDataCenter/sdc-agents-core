@@ -21,6 +21,10 @@ pipeline {
         timestamps()
     }
 
+    tools {
+        nodejs 'sdcnode-v0.10.48-zone'
+    }
+
     stages {
         stage('check') {
             steps{
