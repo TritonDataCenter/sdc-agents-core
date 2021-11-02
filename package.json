@@ -5,7 +5,7 @@
   "author": "Joyent (joyent.com)",
   "private": true,
   "dependencies": {
-    "amqp": "git://github.com/postwait/node-amqp.git#ae3a1435ac40379cb6f395085f3dc4444b649143",
+    "amqp": "https://github.com/postwait/node-amqp.git#ae3a1435ac40379cb6f395085f3dc4444b649143",
     "async": "0.1.18",
     "log4js": "0.4.1",
     "mkdirp": "0.3.4"
