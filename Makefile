@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2019, Joyent, Inc.
+# Copyright 2022 MNX Cloud, Inc.
 #
 # Makefile: basic Makefile for template API service
 #
@@ -70,8 +71,9 @@ release: all deps $(SMF_MANIFESTS)
     $(TOP)/Makefile \
     $(TOP)/node_modules \
     $(TOP)/npm \
-    $(TOP)/package.json \
     $(RELSTAGEDIR)/$(NAME)
+	json -f $(TOP)/package.json -e 'this.version += "-$(STAMP)"' \
+	    > $(RELSTAGEDIR)/$(NAME)/package.json
 	uuid -v4 > $(RELSTAGEDIR)/$(NAME)/image_uuid
 	(cd $(RELSTAGEDIR) && $(TAR) -I pigz -cf $(TOP)/$(RELEASE_TARBALL) *)
 	cat $(TOP)/manifest.tmpl | sed \
