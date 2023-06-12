@@ -6,6 +6,7 @@
 
 #
 # Copyright (c) 2014, Joyent, Inc.
+# Copyright 2023 MNX Cloud, Inc.
 #
 
 # Set up an NPM environment where we will install all the agents.
@@ -39,7 +40,6 @@ mkdir -p "$BIN_DIR"      \
          "$ETC_DIR"      \
          "$DB_DIR"       \
          "$NODE_MODULES" \
-         "$MANROOT_DIR"  \
          "$SMFDIR"       \
 
 NODE="/usr/node/bin/node"
