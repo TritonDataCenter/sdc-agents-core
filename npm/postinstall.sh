@@ -7,6 +7,7 @@
 
 #
 # Copyright (c) 2015, Joyent, Inc.
+# Copyright 2023 MNX Cloud, Inc.
 #
 
 set -o xtrace
@@ -18,7 +19,12 @@ export ETC_DIR=$npm_config_etc
 export SMF_DIR=$npm_config_smfdir
 export VERSION=$npm_package_version
 
-. /lib/sdc/config.sh
+if [[ "$(uname -s)" == "Linux" ]]; then
+    . /usr/triton/bin/config.sh
+else
+    . /lib/sdc/config.sh
+fi
+
 load_sdc_config
 
 AGENT=$npm_package_name
