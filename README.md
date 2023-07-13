@@ -6,15 +6,16 @@
 
 <!--
     Copyright (c) 2014, Joyent, Inc.
+    Copyright 2023 MNX Cloud, Inc.
 -->
 
 # SDC Agents Core
 
-This repository is part of the SmartDataCenter (SDC) project. For
+This repository is part of the Triton DataCenter project. For
 contribution guidelines, issues, and general documentation, visit the
-[main SDC project](http://github.com/joyent/sdc).
+[main SDC project](http://github.com/TritonDataCenter/triton).
 
-SDC agents core bootstraps an agents installation onto a SmartDataCenter
+SDC agents core bootstraps an agents installation onto a Triton DataCenter
 headnode or compute nodes.
 
 ## License

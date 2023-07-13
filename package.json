@@ -1,8 +1,8 @@
 {
   "name": "agents_core",
-  "description": "Joyent SmartDC Agent Core",
-  "version": "2.2.2",
-  "author": "Joyent (joyent.com)",
+  "description": "Triton DataCenter Agent Core",
+  "version": "2.2.3",
+  "author": "MNX Cloud (mnx.io)",
   "private": true,
   "dependencies": {
     "amqp": "https://github.com/postwait/node-amqp.git#ae3a1435ac40379cb6f395085f3dc4444b649143",
