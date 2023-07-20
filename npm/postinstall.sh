@@ -19,11 +19,16 @@ export ETC_DIR=$npm_config_etc
 export SMF_DIR=$npm_config_smfdir
 export VERSION=$npm_package_version
 
-if [[ "$(uname -s)" == "Linux" ]]; then
-    . /usr/triton/bin/config.sh
-else
-    . /lib/sdc/config.sh
-fi
+systype="$(uname -s)"
+case "$systype" in
+  Linux) config=/usr/triton/bin/config.sh ;;
+  SunOS) config=/lib/sdc/config.sh ;;
+  *)
+    printf 'Unsupported system type: %s\n' "$systype"
+    exit 1
+    ;;
+esac
+. "${config:?}"
 
 load_sdc_config
 
